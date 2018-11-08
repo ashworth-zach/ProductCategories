@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+</head>
+ 
+<body>
+    <header class="jumbotron"><h1 class="text-center">Products | <a href="/categories">Categories</a></h1>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 border-right">
+                <h1 class="text-center">New Product</h1>
+                @model Products
+                <form asp-action="AddProduct" asp-controller="Home" method="post">
+                    <span asp-validation-for="Name"></span>
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name"><br>
+                   <span asp-validation-for="Description"></span>
+                <label asp-for="Description">Description</label>
+                <input asp-for="Description"><br>
+                <span asp-validation-for="Price"></span>
+                <label asp-for="Price">Price</label>
+                <input asp-for="Price"><br>
+                <input value="add Product" type="submit">
+                </form>
+            </div>
+            <div class="col-sm-6">
+                <h1 class="text-center">Existing products</h1>
+                @foreach(var x in ViewBag.Products)
+                {
+                    <li><a href="/products/@x.ProductId">@x.Name</a> - $@x.Price</li>
+                }
+            </div>
+        </div>
+    </div>
+</table>
+</body>
+</html>

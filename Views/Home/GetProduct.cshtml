@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+</head>
+ 
+<body>
+    <header class="jumbotron"><h1 class="text-center">@ViewBag.Item.Name</h1>
+    </header>
+    <a href="/">Home</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 border-right">
+                <h1>Categories</h1>
+                @foreach(var x in ViewBag.Product){
+                    @foreach(var y in x.Associations){
+                        <p>@y.Categories.Name</p>
+                    }
+            }
+            </div>
+            <div class="col-sm-6">
+                <h1>Add a Category</h1>
+                @model Associations
+                <form asp-action="AddCategoryAssociation" asp-controller="Home" method="post">
+                    <label asp-for="CategoryId">Category:</label>
+                    <span asp-validation-for="CategoryId"></span>
+                    <select asp-for='CategoryId'>
+                        @foreach(var x in @ViewBag.AllCategories){
+                        <option value='@x.CategoryId'>@x.Name</option>
+                        }
+                    </select><br>
+                    <span asp-validation-for="ProductId"></span>
+                    <input type="hidden" value="@ViewBag.Item.ProductId" asp-for="ProductId"><br>
+                    <input value="add Association" type="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+</table>
+</body>
+</html>
