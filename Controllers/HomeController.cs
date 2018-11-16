@@ -65,15 +65,17 @@ namespace productcategories.Controllers
         public IActionResult GetProduct(int id)
         {
             Products retrievedItem = dbContext.products.FirstOrDefault(x => x.ProductId == id);
-            // var query = select * from categories where id not in (
-            //             select c.id 
-            //             from products as p
-            //             join category_has_products as c2p on p.id = c2p.product_id
-            //             join categories c on c.id = c2p.category_id
-            //             where c.id = 2
-            //             )
             var productcategories = dbContext.products.Include(x => x.Associations).ThenInclude(z => z.Categories).Where(z => z.ProductId == retrievedItem.ProductId).ToList();
-            List<Categories> AllCategories = dbContext.categories.ToList();
+            List<Categories> getrid = new List<Categories>();
+            foreach (var x in productcategories)
+            {
+                foreach (var y in x.Associations)
+                {
+                    Categories Not = dbContext.categories.FirstOrDefault(z => z.CategoryId == y.Categories.CategoryId);
+                    getrid.Add(Not);
+                }
+            }
+            List<Categories> AllCategories = dbContext.categories.Except(getrid).ToList();
             ViewBag.AllCategories = AllCategories;
             ViewBag.Product = productcategories;
             ViewBag.Item = retrievedItem;
@@ -84,7 +86,17 @@ namespace productcategories.Controllers
         {
             Categories retrievedItem = dbContext.categories.FirstOrDefault(x => x.CategoryId == id);
             var CategoryProducts = dbContext.categories.Include(x => x.Associations).ThenInclude(z => z.Products).Where(z => z.CategoryId == retrievedItem.CategoryId).ToList();
-            List<Products> AllProducts = dbContext.products.ToList();
+
+            List<Products> getrid = new List<Products>();
+            foreach (var x in CategoryProducts)
+            {
+                foreach (var y in x.Associations)
+                {
+                    Products Not = dbContext.products.FirstOrDefault(z => z.ProductId == y.Products.ProductId);
+                    getrid.Add(Not);
+                }
+            }
+            List<Products> AllProducts = dbContext.products.Except(getrid).ToList();
             ViewBag.Products = AllProducts;
             ViewBag.CategoryProducts = CategoryProducts;
             ViewBag.Category = retrievedItem;
